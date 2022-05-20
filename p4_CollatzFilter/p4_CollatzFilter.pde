@@ -14,13 +14,15 @@ void setup(){
 	/* imagefit takes the path or the PImage as its first argument */
 	/* imagefit optionally takes a downsample factor as its second argument */
 	
-	// source = imagefit("./imgs/clouds.jpg", dnsmp);
+	// source = imagefit("./imgs/enrapture-captivating-media-8_oFcxtXUSU-unsplash.jpg", dnsmp);
 	source = imagefit(randomImage(width/100,height/100), dnsmp);
 	imageMode(CENTER); /* set the image's anchor to its center */
 	dscale = (dnsmp/2.); /* set the display scale of the image */
+	background(0);
 }
 
 void draw(){
+	background(0);
 	collatzFilter(source); /* apply collatz to r,g,b channels */
 	// meanCollatzFilter(source); /* apply collatz to rgb avg */
 	image(source, width/2, height/2, source.pixelWidth*dscale, source.pixelHeight*dscale);
@@ -91,13 +93,18 @@ PImage imagefit(PImage s, float ds){
 	return s;
 }
 
+PImage imagefit(PImage pmg){
+	return imagefit(pmg, 1.0);
+}
+
+PImage imagefit(String spath, float ds){
+	PImage s = loadImage(spath);
+	return imagefit(s, ds);
+}
+
 PImage imagefit(String spath){
 	PImage s = loadImage(spath);
 	return imagefit(s, 1.0);
-}
-
-PImage imagefit(PImage pmg){
-	return imagefit(pmg, 1.0);
 }
 
 PImage randomImage(int w, int h){
