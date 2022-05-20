@@ -23,6 +23,7 @@ float dnsmp, dscale;
 	// CANVAS SETTINGS
 	/* size commented out by preprocessor */;
 	/* pixelDensity commented out by preprocessor */;
+	background(0);
 	
 	// IMAGE SETTINGS
 	dnsmp = 1.00f; /* downsample factor => 1.00: least, +: most */
@@ -30,12 +31,14 @@ float dnsmp, dscale;
 	/* imagefit fits the image to screen preserving aspect ratio */
 	/* imagefit takes the path or the PImage as its first argument */
 	/* imagefit optionally takes a downsample factor as its second argument */
+	/* imagefit(path|image, downsample-factor) */
 	
-	// source = imagefit("./imgs/enrapture-captivating-media-8_oFcxtXUSU-unsplash.jpg", dnsmp);
-	source = imagefit(randomImage(width/100,height/100), dnsmp);
+	source = imagefit(randomImage(pixelWidth/100,pixelHeight/100), dnsmp);
 	imageMode(CENTER); /* set the image's anchor to its center */
 	dscale = (dnsmp/2.f); /* set the display scale of the image */
-	background(0);
+	
+	// ANIMATION SETTINGS
+	// frameRate(1); /* Slow things down */
 }
 
  public void draw(){
