@@ -33,6 +33,7 @@ void draw(){
 
 void collatzFilter(PImage srci) {
 	srci.loadPixels();
+	// ITERATE OVER IMAGE PIXELS
 	for (int i = 0; i < srci.pixelWidth; i++){
 		for (int j = 0; j < srci.pixelHeight; j++){
 			// GET CURRENT PIXEL COLOR
