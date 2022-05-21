@@ -33,7 +33,8 @@ float dnsmp, dscale;
 	/* imagefit optionally takes a downsample factor as its second argument */
 	/* imagefit(path|image, downsample-factor) */
 	
-	source = imagefit(randomImage(pixelWidth/100,pixelHeight/100), dnsmp);
+	// source = imagefit(randomImage(pixelWidth/100,pixelHeight/100), dnsmp);
+	source = imagefit("./imgs/logo_5_retina.png", dnsmp);
 	imageMode(CENTER); /* set the image's anchor to its center */
 	dscale = (dnsmp/2.f); /* set the display scale of the image */
 	
@@ -50,6 +51,7 @@ float dnsmp, dscale;
 
  public void collatzFilter(PImage srci) {
 	srci.loadPixels();
+	// ITERATE OVER IMAGE PIXELS
 	for (int i = 0; i < srci.pixelWidth; i++){
 		for (int j = 0; j < srci.pixelHeight; j++){
 			// GET CURRENT PIXEL COLOR

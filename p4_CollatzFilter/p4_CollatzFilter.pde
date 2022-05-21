@@ -16,7 +16,8 @@ void setup(){
 	/* imagefit optionally takes a downsample factor as its second argument */
 	/* imagefit(path|image, downsample-factor) */
 	
-	source = imagefit(randomImage(pixelWidth/100,pixelHeight/100), dnsmp);
+	// source = imagefit(randomImage(pixelWidth/100,pixelHeight/100), dnsmp); /* Use an image or fn that returns an image as the first argument */
+	source = imagefit("./imgs/logo_5_retina.png", dnsmp); /* Use a filepath to an image as the first argument */
 	imageMode(CENTER); /* set the image's anchor to its center */
 	dscale = (dnsmp/2.); /* set the display scale of the image */
 	
