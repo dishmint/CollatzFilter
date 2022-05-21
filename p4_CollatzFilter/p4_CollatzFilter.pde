@@ -16,8 +16,10 @@ void setup(){
 	/* imagefit optionally takes a downsample factor as its second argument */
 	/* imagefit(path|image, downsample-factor) */
 	
-	source = imagefit(randomImage(pixelWidth/100,pixelHeight/100), dnsmp); /* Use an image or fn that returns an image as the first argument */
-	// source = imagefit("./imgs/logo_5_retina.png", dnsmp); /* Use a filepath to an image as the first argument */
+	// source = imagefit(randomImage(pixelWidth/600,pixelHeight/600), dnsmp); /* Use an image or fn that returns an image as the first argument */
+	String fpath = "./imgs/enrapture-captivating-media-8_oFcxtXUSU-unsplash.jpg";
+	source = imagefit(fpath, dnsmp); /* Use an image filepath as the first argument */
+	// source.filter(GRAY);
 	imageMode(CENTER); /* set the image's anchor to its center */
 	dscale = (dnsmp/2.); /* set the display scale of the image */
 	
@@ -29,6 +31,7 @@ void draw(){
 	background(0);
 	collatzFilter(source); /* apply collatz to r,g,b channels */
 	// meanCollatzFilter(source); /* apply collatz to rgb avg */
+	// collatzKernelFilter(source);
 	image(source, width/2, height/2, source.pixelWidth*dscale, source.pixelHeight*dscale);
 }
 
@@ -80,6 +83,102 @@ void meanCollatzFilter(PImage srci) {
 		}
 	}
 	srci.updatePixels();
+}
+
+void collatzKernelFilter(PImage srci) {
+	srci.loadPixels();
+	// ITERATE OVER IMAGE PIXELS
+	for (int i = 0; i < srci.pixelWidth; i++){
+		for (int j = 0; j < srci.pixelHeight; j++){
+			// APPLY KERNEL
+			color npx = collatzConvolve(srci, i, j);
+			// color npx = collatzTransmit(srci, i, j);
+			// GET CURRENT PIXEL COLOR
+			int index = (i + j * srci.pixelWidth);
+			index = constrain(index, 0, srci.pixels.length -1);
+			
+			srci.pixels[index] = color(npx);
+		}
+	}
+	srci.updatePixels();
+}
+
+color collatzConvolve(PImage simg, int x, int y){
+	
+	float rtotal = 0.0;
+	float gtotal = 0.0;
+	float btotal = 0.0;
+	
+	int kwidth = 3;
+	int sf = Math.round(pow(kwidth,2));
+	int offset = kwidth / 2;
+	for (int i = 0; i < kwidth; i++){
+		for (int j= 0; j < kwidth; j++){
+			
+			int xloc = x+i-offset;
+			int yloc = y+j-offset;
+			int loc = xloc + simg.pixelWidth*yloc;
+			loc = constrain(loc,0,simg.pixels.length-1);
+			
+			color cpx = simg.pixels[loc];
+			
+			float rpx = cpx >> 16 & 0xFF;
+			float gpx = cpx >> 8 & 0xFF;
+			float bpx = cpx & 0xFF;
+			
+			rtotal += rpx;
+			gtotal += gpx;
+			btotal += bpx;
+		}
+	}
+
+	int nrpx = collatz((int)(rtotal/sf));
+	int ngpx = collatz((int)(gtotal/sf));
+	int nbpx = collatz((int)(btotal/sf));
+	
+	return color(nrpx,ngpx,nbpx);
+}
+
+color collatzTransmit(PImage simg, int x, int y){
+	
+	float rtotal = 0.0;
+	float gtotal = 0.0;
+	float btotal = 0.0;
+	
+	int kwidth = 3;
+	int sf = Math.round(pow(kwidth,2));
+	int offset = kwidth / 2;
+	for (int i = 0; i < kwidth; i++){
+		for (int j= 0; j < kwidth; j++){
+			
+			int xloc = x+i-offset;
+			int yloc = y+j-offset;
+			int loc = xloc + simg.width*yloc;
+			loc = constrain(loc,0,simg.pixels.length-1);
+			
+			color cpx = simg.pixels[loc];
+			
+			float rpx = cpx >> 16 & 0xFF;
+			float gpx = cpx >> 8 & 0xFF;
+			float bpx = cpx & 0xFF;
+			
+			if(xloc == x && yloc == y){
+				rtotal -= rpx;
+				gtotal -= gpx;
+				btotal -= bpx;
+			} else {
+				rtotal += rpx;
+				gtotal += gpx;
+				btotal += bpx;
+			}
+		}
+	}
+	
+	int nrpx = collatz((int)(rtotal/sf));
+	int ngpx = collatz((int)(gtotal/sf));
+	int nbpx = collatz((int)(btotal/sf));
+	
+	return color(nrpx,ngpx,nbpx);
 }
 
 int collatz(int num){
